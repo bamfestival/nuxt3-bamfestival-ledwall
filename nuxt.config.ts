@@ -1,9 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
      modules: [
-                '@nuxtjs/tailwindcss',
-                '@nuxt/image-edge',
-                'nuxt-swiper',
+        '@nuxtjs/tailwindcss',
+        '@nuxt/image-edge',
+        'nuxt-swiper',
+        '@vite-pwa/nuxt',
               ],
      runtimeConfig: {
         
@@ -28,7 +29,7 @@ export default defineNuxtConfig({
       swiper: {
  
       },
-      content: {
-       
+      pwa: {
+        /* PWA options */
       },
 })
