@@ -16,6 +16,7 @@ export default defineNuxtConfig({
         viewer: false
       },
      image: {
+        provider: 'static',
         presets: {
             slide: {
               modifiers: {
