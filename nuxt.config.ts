@@ -22,7 +22,7 @@ export default defineNuxtConfig({
         presets: {
             slide: {
               modifiers: {
-                format: 'png',
+                format: 'jpg',
                 width: 1920,
                 fit: 'cover',
               }
