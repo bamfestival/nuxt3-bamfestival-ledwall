@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    ssr: true,
+    
      modules: [
         '@nuxtjs/tailwindcss',
         '@nuxt/image-edge',
@@ -16,7 +18,7 @@ export default defineNuxtConfig({
         viewer: false
       },
      image: {
-        provider: 'static',
+        
         presets: {
             slide: {
               modifiers: {
