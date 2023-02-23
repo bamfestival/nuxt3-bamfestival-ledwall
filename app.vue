@@ -83,7 +83,7 @@ const slides = ref(Array.from({ length: 3 }, () => {
   
   font-size: 4rem;
   font-weight: bold;
-  font-family: 'Roboto', sans-serif;
+  
 }
 .swiper-wrapper {
   min-width: 100vh;
