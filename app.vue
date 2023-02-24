@@ -28,7 +28,7 @@
         <nuxt-img src="/images/plattegrond.jpg" preset="slide"></nuxt-img>
       </SwiperSlide>
       <SwiperSlide>
-        <nuxt-img src="/images/Lg_Metropool-RGB.jpg" preset="slide"></nuxt-img>
+        <nuxt-img src="/Lg_Metropool-RGB.jpg" preset="slide"></nuxt-img>
       </SwiperSlide>
       <SwiperSlide data-swiper-autoplay="10000">
         <video autoplay muted>
