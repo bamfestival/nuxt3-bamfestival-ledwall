@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    ssr: true,
+    
     
      modules: [
         '@nuxtjs/tailwindcss',
@@ -22,7 +22,7 @@ export default defineNuxtConfig({
         presets: {
             slide: {
               modifiers: {
-                format: 'jpg',
+                format: 'png',
                 width: 1920,
                 fit: 'cover',
               }
