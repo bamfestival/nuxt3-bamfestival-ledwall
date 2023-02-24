@@ -16,7 +16,7 @@
       :creative-effect="{
         prev: {
           shadow: false,
-          translate: ['-20%', 0, -1]
+          translate: ['-100%', 0, -1]
         },
         next: {
           translate: ['100%', 0, 0]
@@ -25,10 +25,10 @@
     >
 
       <SwiperSlide>
-        <nuxt-img src="/images/plattegrond.jpg" preset="slide"></nuxt-img>
+        <img src="/images/plattegrond.jpg">
       </SwiperSlide>
       <SwiperSlide>
-        <nuxt-img src="/Lg_Metropool-RGB.jpg" preset="slide"></nuxt-img>
+        <img src="/images/Lg_Metropool-RGB.jpg">
       </SwiperSlide>
       <SwiperSlide data-swiper-autoplay="10000">
         <video autoplay muted>
@@ -36,18 +36,18 @@
         </video>
       </SwiperSlide>
       <SwiperSlide v-for="event in highlights.data" :key="event.title">
-        <div class="h-screen py-6 px-6 content-evenly bg-white">
-            <nuxt-img class="rounded-lg object-cover shadow-lg" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`"></nuxt-img>
+        <div class="h-screen py-6 px-6 content-evenly bg-white w-full">
+            <img class="rounded-lg object-cover shadow-lg" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`">
         <div class="space-y-2">
                 <div class="space-y-1 font-medium leading-6">
                   <h3 class="text-indigo-600 font-bold uppercase">{{ event.title }}</h3>
                   <span class="">{{ event.field_subtitle }}</span>
-                    <div class="flex space-x-4">
+                    
                         <div class="flex">{{ event.field_dag }}</div>
                         <div class="flex">Main stage</div>
                         <div class="flex">21:30 uur</div>
                         <div class="flex">{{ event.field_tags[0].name }}</div>
-                    </div>
+                    
                 </div>
               </div>
          </div>     
