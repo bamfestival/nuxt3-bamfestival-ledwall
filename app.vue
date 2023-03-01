@@ -2,7 +2,8 @@
 
 <template>
   <div class="bg-black w-full h-full">
-
+    <VitePwaManifest />
+    <NuxtLoadingIndicator />
     <Swiper
       :height="300"
       :modules="[SwiperAutoplay, SwiperEffectCreative]"
