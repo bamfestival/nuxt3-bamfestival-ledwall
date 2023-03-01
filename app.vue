@@ -75,16 +75,7 @@ const slides = ref(Array.from({ length: 3 }, () => {
 
 
 <style>
-.swiper-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  
-  font-size: 4rem;
-  font-weight: bold;
-  
-}
+
 .swiper-wrapper {
   min-width: 100vh;
   width: 100vh;
