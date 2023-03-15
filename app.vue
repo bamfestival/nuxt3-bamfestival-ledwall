@@ -25,18 +25,20 @@
       }"
     >
 
-      <SwiperSlide>
-        <img src="/images/plattegrond.jpg">
+      <SwiperSlide v-for="banner in banners.data" :key="banner.id" data-swiper-autoplay="3000">
+        
+        <img :src="`${ runtimeConfig.public.apiUrl }${banner.relationships.field_image.id }`"> 
       </SwiperSlide>
-      <SwiperSlide>
-        <img src="/images/Lg_Metropool-RGB.jpg">
-      </SwiperSlide>
+
+
+
+
       <SwiperSlide data-swiper-autoplay="10000">
         <video autoplay muted>
             <source src="/videos/Stravinsky_AD_v4.mp4" type="video/mp4">
         </video>
       </SwiperSlide>
-      <SwiperSlide v-for="event in highlights.data" :key="event.title">
+      <SwiperSlide v-for="event in highlights.data" :key="event.title"  data-swiper-autoplay="500">
         <div class="h-screen py-6 px-6 content-evenly bg-white w-full">
             <img class="rounded-lg object-cover shadow-lg" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`">
         <div class="space-y-2">
@@ -60,17 +62,17 @@
 
 <script setup>
  const runtimeConfig = useRuntimeConfig();
- const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?filter[status][value]=1&filter[promote][value]=1&sort=field_dag,-field_weight,title&include=field_image_portrait,field_location,field_tags&filter[name-filter][condition][path]=field_weight&filter[name-filter][condition][operator]=IN&filter[name-filter][condition][value][1]=5&filter[name-filter][condition][value][2]=4&jsonapi_include=1')
-    
+ const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?filter[status][value]=1&filter[promote][value]=1&sort=field_dag,-field_weight,title&include=field_image_portrait,field_location,field_tags&filter[name-filter][condition][path]=field_weight&filter[name-filter][condition][operator]=IN&filter[name-filter][condition][value][1]=5&filter[name-filter][condition][value][2]=4&jsonapi_include=1');
+
+ const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&filter[promote][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED");
+ 
+ const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?json_include=1&field_visibility[value]=LED&include=field_image,field_media");
+
+
+
+ console.log(banners.data);  
   
-const slides = ref(Array.from({ length: 3 }, () => {
-  const r = Math.floor(Math.random() * 256)
-  const g = Math.floor(Math.random() * 256)
-  const b = Math.floor(Math.random() * 256)
-  // Figure out contrast color for font
-  const contrast = r * 0.299 + g * 0.587 + b * 0.114 > 186 ? 'black' : 'white'
-  return { bg: `rgb(${r}, ${g}, ${b})`, color: contrast }
-}))
+
 </script>
 
 

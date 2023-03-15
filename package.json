@@ -9,7 +9,6 @@
   },
   "devDependencies": {
     "@nuxt/content": "^2.4.3",
-    "@nuxt/devtools": "^0.1.6",
     "@nuxt/image-edge": "^1.0.0-27952794.567c688",
     "@nuxtjs/tailwindcss": "^6.4.1",
     "@vite-pwa/nuxt": "^0.0.6",
