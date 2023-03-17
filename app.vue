@@ -5,7 +5,7 @@
     <VitePwaManifest />
     <NuxtLoadingIndicator />
     <Swiper
-      :height="300"
+      class="h-full"
       :modules="[SwiperAutoplay, SwiperEffectCreative]"
       :slides-per-view="1"
       :loop="true"
@@ -24,21 +24,24 @@
         }
       }"
     >
-
-      <SwiperSlide v-for="banner in banners.data" :key="banner.id" data-swiper-autoplay="3000">
-        
-        <img :src="`${ runtimeConfig.public.apiUrl }${banner.relationships.field_image.id }`"> 
-      </SwiperSlide>
-
-
-
-
       <SwiperSlide data-swiper-autoplay="10000">
         <video autoplay muted>
             <source src="/videos/Stravinsky_AD_v4.mp4" type="video/mp4">
         </video>
       </SwiperSlide>
-      <SwiperSlide v-for="event in highlights.data" :key="event.title"  data-swiper-autoplay="500">
+
+      <SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="3000">
+        <div class="h-screen w-full">
+          <img  :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" /> 
+        </div>
+        
+      </SwiperSlide>
+
+
+
+
+
+      <SwiperSlide v-for="event in highlights.data" :key="event.title"  data-swiper-autoplay="3000">
         <div class="h-screen py-6 px-6 content-evenly bg-white w-full">
             <img class="rounded-lg object-cover shadow-lg" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`">
         <div class="space-y-2">
@@ -66,12 +69,8 @@
 
  const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&filter[promote][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED");
  
- const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?json_include=1&field_visibility[value]=LED&include=field_image,field_media");
+ const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?jsonapi_include=1&field_visibility[value]=LED&include=field_image,field_media");
 
-
-
- console.log(banners.data);  
-  
 
 </script>
 
