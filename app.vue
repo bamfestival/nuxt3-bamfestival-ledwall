@@ -38,6 +38,13 @@
       </SwiperSlide>
 
 
+      <SwiperSlide v-for="sponsor in sponsoren .data" :key="sponsor.title" data-swiper-autoplay="3000">
+        <div class="h-screen w-full">
+          <img  :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> 
+        </div>
+        
+      </SwiperSlide>
+
 
 
 
