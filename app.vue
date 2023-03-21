@@ -24,33 +24,42 @@
         }
       }"
     >
-      <SwiperSlide data-swiper-autoplay="10000">
-        <video autoplay muted>
-            <source src="/videos/Stravinsky_AD_v4.mp4" type="video/mp4">
-        </video>
+     
+    <SwiperSlide v-for="sponsor in sponsorslides .data" :key="sponsor.title" data-swiper-autoplay="3000">
+        <div class="h-screen w-full justify-center">
+          <nuxt-img format="webp" width="1920" height="1080" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url }`" /> 
+        </div>
+        
       </SwiperSlide>
 
       <SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="3000">
         <div class="h-screen w-full">
-          <img  :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" /> 
+          <nuxt-img  format="webp" width="1920" height="1080" :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" /> 
         </div>
         
       </SwiperSlide>
 
 
-      <SwiperSlide v-for="sponsor in sponsoren .data" :key="sponsor.title" data-swiper-autoplay="3000">
+      <SwiperSlide v-for="sponsor in sponsoren .data" :key="sponsor.title" data-swiper-autoplay="5000">
+        <div class="h-screen w-full justify-center">
+          <nuxt-img class="bg-white" format="webp" width="512" height="512" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> 
+        </div>
+        
+      </SwiperSlide>
+
+      <SwiperSlide v-for="page in pages.data" :key="page.title" data-swiper-autoplay="3000">
         <div class="h-screen w-full">
-          <img  :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> 
+          <h2 class="text-white">{{  page.title }}</h2>
+          <p class="text-white" v-html="page.body.processed"></p>
+          <nuxt-img format="webp" width="400" height="400"  :src="`${ runtimeConfig.public.apiUrl }${page.field_image.uri.url }`" /> 
         </div>
         
       </SwiperSlide>
-
-
 
 
       <SwiperSlide v-for="event in highlights.data" :key="event.title"  data-swiper-autoplay="3000">
-        <div class="h-screen py-6 px-6 content-evenly bg-white w-full">
-            <img class="rounded-lg object-cover shadow-lg" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`">
+        <div class="h-screen py-6 px-6 content-evenly bg-white w-full justify-center">
+            <nuxt-img class="rounded-lg object-cover shadow-lg" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" />
         <div class="space-y-2">
                 <div class="space-y-1 font-medium leading-6">
                   <h3 class="text-indigo-600 font-bold uppercase">{{ event.title }}</h3>
@@ -78,7 +87,12 @@
  
  const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?jsonapi_include=1&field_visibility[value]=LED&include=field_image,field_media");
 
+ const { data:pages } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/page?jsonapi_include=1&field_visibility[value]=LED&include=field_image");
 
+ const { data:sponsorslides } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&filter[promote][value]=1&sort=-field_weight,title&include=field_sponsor_slide&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NOT NULL");
+
+ const { data:sponsorvideos } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&filter[promote][value]=1&sort=-field_weight,title&include=field_sponsorvideo&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsorvideo][condition][path]=field_sponsorvideo&filter[field_sponsorvideo][condition][operator]=IS NOT NULL");
+ console.log(sponsorvideos.value.data);
 </script>
 
 
