@@ -16,5 +16,8 @@
     "nuxt": "^3.2.2",
     "nuxt-swiper": "^1.0.1",
     "vite-plugin-pwa": "^0.14.4"
+  },
+  "dependencies": {
+    "@nuxtjs/dayjs": "^1.4.1"
   }
 }
