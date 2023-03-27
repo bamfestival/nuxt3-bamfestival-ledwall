@@ -12,12 +12,16 @@
     "@nuxt/devtools": "^0.2.5",
     "@nuxt/image-edge": "^1.0.0-27952794.567c688",
     "@nuxtjs/tailwindcss": "^6.4.1",
+    "@tailwindcss/typography": "^0.5.9",
     "@vite-pwa/nuxt": "^0.0.6",
     "nuxt": "^3.2.2",
     "nuxt-swiper": "^1.0.1",
     "vite-plugin-pwa": "^0.14.4"
   },
   "dependencies": {
-    "@nuxtjs/dayjs": "^1.4.1"
+    "@nuxtjs/dayjs": "^1.4.1",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/line-clamp": "^0.4.2"
   }
 }

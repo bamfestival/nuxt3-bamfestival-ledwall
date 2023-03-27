@@ -27,7 +27,7 @@ export default {
     
       fontFamily: {
         heading: ['Interstate', 'sans-serif'],
-        body: ['Merriweather Sans', 'sans-serif']
+        body: ['Merriweather Sans', 'sans-serif'],
         sans: ['Interstate', 'sans-serif'],
         serif: ['Merriweather Sans', 'serif'],
       }
