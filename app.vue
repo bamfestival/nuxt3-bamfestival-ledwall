@@ -1,7 +1,7 @@
 <!-- https://swiperjs.com / https://swiperjs.com/element -->
-
+<!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString -->
 <template>
-  <div class="bg-black w-full h-full">
+  <div class="bg-black"  style="width: 1920px; height: 1080px;">
     <VitePwaManifest />
     <NuxtLoadingIndicator />
     <Swiper
@@ -24,18 +24,25 @@
         }
       }"
     >
-    <SwiperSlide v-for="event in highlights.data" :key="event.title"  data-swiper-autoplay="3000">
-        <div class="h-screen w-full flex bg-white justify-center">
-            <nuxt-img  :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" />
+
+    <SwiperSlide v-for="event in highlights.data" :key="event.title"  data-swiper-autoplay="9000">
+        <div class="flex bg-white justify-center background"  style="width: 1920px; height: 1080px;">
+            <nuxt-img  preset="event" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" />
         <div class="space-y-2">
-                <div class="space-y-1 font-medium leading-6">
-                  <h3 class="text-indigo-600 font-bold uppercase">{{ event.title }}</h3>
+                <div class="space-y-1 font-large leading-6">
+                  <h3 class="font-bold uppercase">{{ event.title }}</h3>
                   <span class="font-interstate">{{ event.field_subtitle }}</span>
-                    
+                         
                         <div class="flex">{{ event.field_dag }}</div>
                         <div class="flex">{{ event.feld_location }}</div>
                         <div class="flex">{{ new Date(event.field_aanvang).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" })  }} - {{ new Date(event.field_einde).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" }) }}</div>
                         <div class="flex">{{ event.field_tags[0].name }}</div>
+                        
+                        <div class="flex">tijd nu: {{ formatTime(new Date().getTime()) }} uur</div>
+                        <div class="flex" :v-show="compareTime(event.field_aanvang,event.field_einde)">Yes!!!</div>
+                        
+                        
+ 
                     
                 </div>
               </div>
@@ -44,15 +51,15 @@
 
 
     <SwiperSlide v-for="sponsor in sponsorslides.data" :key="sponsor.title" data-swiper-autoplay="3000">
-        <div class="h-screen w-full justify-center">
-          <nuxt-img fit="cover" format="webp" width="1920" height="1080" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url}`" class="object-scale-down"/> 
+        <div class="h-screen w-full flex items-center justify-center">
+          <nuxt-img preset="slide" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url}`" class="object-scale-down"/> 
         </div>
         
       </SwiperSlide>
 
       <SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="3000">
         <div class="h-screen w-full">
-          <nuxt-img  format="webp" width="1920" height="1080" :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" class="overflow-hidden"/> 
+          <nuxt-img  preset="slide" :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" class="overflow-hidden"/> 
         </div>
         
       </SwiperSlide>
@@ -60,7 +67,7 @@
 
       <SwiperSlide v-for="sponsor in sponsoren .data" :key="sponsor.title" data-swiper-autoplay="5000">
         <div class="h-screen w-full flex items-center justify-center">
-          <nuxt-img class="bg-white" format="webp" width="512" height="512" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> 
+          <nuxt-img class="bg-white" preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> 
         </div>
         
       </SwiperSlide>
@@ -69,7 +76,7 @@
         <div class="h-screen w-full flex items-center justify-center">
           
           <p class="text-white" v-html="page.body.processed"></p>
-          <nuxt-img format="webp" width="700" height="700"  :src="`${ runtimeConfig.public.apiUrl }${page.field_image.uri.url }`" /> 
+          <nuxt-img preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${page.field_image.uri.url }`" /> 
         </div>
         
       </SwiperSlide>
@@ -95,11 +102,40 @@
 <script setup lang="ts">
 import consolaGlobalInstance from 'consola';
 
+function formatTime(v) {
+        
+     var today = new Date(v).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" });
+     return today;   
+      }
+
+function compareTime(aanvang_temp,einde_temp) {
+  var show = '';
+  var nu_temp = new Date();
+  var nu = nu_temp.getTime();
+  var straks_temp = new Date();
+  var straks_temp = straks_temp.setHours(straks_temp.getHours()+1);
+  var straks = new Date(straks_temp).getTime();
+  var aanvang = new Date(aanvang_temp).getTime();
+  var einde = new Date(einde_temp).getTime();
+
+  console.log('aanvang:  ' + aanvang);
+  console.log('einde     ' + einde);
+  console.log('tijd:     ' + nu);
+  console.log('straks:   ' + straks);
+  if (((einde > nu) && (aanvang) < nu) )  { show = "nu bezig!";  }
+  if ((aanvang > nu) && (aanvang < nu)) { show = "straks!";  }
+  if ((aanvang > nu) ) { show = "Later";  }
+  if ((einde < nu) ) { show = "geweest!!!!";  }
+
+  console.log(show);
+  
+  return show;
+}      
 
  const runtimeConfig = useRuntimeConfig();
- const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?filter[status][value]=1&filter[promote][value]=1&sort=field_dag,-field_weight,title&include=field_image_portrait,field_location,field_tags&filter[name-filter][condition][path]=field_weight&filter[name-filter][condition][operator]=IN&filter[name-filter][condition][value][1]=5&filter[name-filter][condition][value][2]=4&jsonapi_include=1');
+ const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?filter[status][value]=1&filter[promote][value]=1&sort=field_dag,-field_weight,title&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
 
- const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&filter[promote][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED");
+ const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&filter[promote][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NULL&filter[field_sponsorvideo][condition][path]=field_sponsor_slide&filter[field_sponsorvideo][condition][operator]=IS NULL");
  
  const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?jsonapi_include=1&field_visibility[value]=LED&include=field_image,field_media");
 
@@ -111,7 +147,8 @@ import consolaGlobalInstance from 'consola';
     
 const { data:mediavideos } = await useFetch("https://cms.bamfestival.nl/jsonapi/media/video/?include=field_media_video_file&jsonapi_include=1");
 
- 
+
+
 
 
 </script>
@@ -119,7 +156,10 @@ const { data:mediavideos } = await useFetch("https://cms.bamfestival.nl/jsonapi/
 
 
 <style>
-
+.background 
+{
+  background-image: url(~/static/background.webp);
+}
 .swiper-wrapper {
   min-width: 100vh;
   width: 100vh;

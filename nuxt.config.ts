@@ -18,12 +18,29 @@ export default defineNuxtConfig({
         viewer: false
       },
      image: {
-        
+        domains: ['cms.bamfestival.nl'],
         presets: {
             slide: {
               modifiers: {
-                format: 'png',
+                format: 'webp',
                 width: 1920,
+                heigth: 1080,
+                fit: 'cover',
+              }
+            },
+            sponsor: {
+              modifiers: {
+                format: 'webp',
+                width: 1024,
+                heigth: 1024,
+                fit: 'cover',
+              }
+            },
+            event: {
+              modifiers: {
+                format: 'webp',
+                width: 540,
+                heigth: 540,
                 fit: 'cover',
               }
             }
