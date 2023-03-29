@@ -25,7 +25,7 @@ export default defineNuxtConfig({
                 format: 'webp',
                 width: 1920,
                 heigth: 1080,
-                fit: 'cover',
+                fit: 'inside',
               }
             },
             sponsor: {

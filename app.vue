@@ -24,7 +24,48 @@
         }
       }">
 
+<!-- Sponsor logo's-->
+<template v-for="i in 5">
+   <SwiperSlide  data-swiper-autoplay="4000">
+        <div class="h-full w-full flex items-center justify-center">
+          <div v-for="(sponsor,index) in sponsoren.data.slice((i-1)*5, (i-1)*5+5)" :key="sponsor.title" ><nuxt-img class="bg-white" preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> </div>
+         
+        </div>
+     
+      </SwiperSlide >
+</template>   
 
+
+<!-- Pages -->
+<SwiperSlide v-for="page in pages.data" :key="page.title" data-swiper-autoplay="9000">
+        <div class="h-full w-full flex items-center justify-center background">
+          <div class="grid grid-flow-row auto-rows-max gap-8 p-16">
+            <div class="justify-center"><nuxt-img format="webp" height="200" width="auto" :src="`${ runtimeConfig.public.apiUrl }${page.field_image.uri.url }`" /> </div>
+            <div class=""><h1 class="text-6xl">{{  page.title }}</h1></div>
+            <div class="text-black text-2xl" v-html="page.body.processed"></div>
+          </div>
+        </div>
+        
+      </SwiperSlide>
+
+<!-- bannners -->
+<SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="3000">
+        <div class="h-full w-full flex items-center justify-center bg-black">
+          <nuxt-img  preset="slide" :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" class="object-scale-down"/> 
+        </div>
+        
+</SwiperSlide>
+
+  <!-- Sponsor Slide-->
+  <SwiperSlide v-for="sponsor in sponsorslides.data" :key="sponsor.title" data-swiper-autoplay="3000">
+        <div class="h-full w-full flex items-center justify-center bg-black">
+          <nuxt-img preset="slide" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url}`"/> 
+        </div>
+  </SwiperSlide>
+
+<!--  -->
+<!-- Nu bezig / straks -->
+<!--  -->
  <template v-for="event in highlights.data" :key="event.title" >
    <template  v-if="compareTime(event.field_aanvang,event.field_einde) != 'DoNotShow'">
     <!-- Nu bezig -->
@@ -70,7 +111,7 @@
                       <h3 class="font-bold uppercase text-white">{{ event.title }}</h3>
                       <span class="font-interstate">{{ event.field_subtitle }}</span> 
                             <div class="flex">{{ event.field_dag }}</div>
-                            <div class="flex">{{ event.field_location }}</div>
+                            <div class="flex">{{ event.field_location.name }}</div>
                             <div class="flex">{{ new Date(event.field_aanvang).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" })  }} - {{ new Date(event.field_einde).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" }) }}</div>
                             <div class="flex">{{ event.field_tags[0].name }}</div>
                             <div class="flex">tijd nu: {{ formatTime(new Date().getTime()) }} uur</div>
@@ -83,42 +124,9 @@
    </template> 
   </template> 
 
-  <SwiperSlide v-for="sponsor in sponsorslides.data" :key="sponsor.title" data-swiper-autoplay="3000">
-        <div class="h-screen w-full flex items-center justify-center background">
-          <nuxt-img preset="slide" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url}`" class="object-scale-down"/> 
-        </div>
-        
-      </SwiperSlide>
-
-      <SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="3000">
-        <div class="h-screen w-full flex items-center justify-center background">
-          <nuxt-img  preset="slide" :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" class="object-scale-down"/> 
-        </div>
-        
-      </SwiperSlide>
-
-
-      <SwiperSlide v-for="sponsor in sponsoren .data" :key="sponsor.title" data-swiper-autoplay="5000">
-        <div class="h-screen w-full flex items-center justify-center" background>
-          <nuxt-img class="bg-white" preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> 
-        </div>
-        
-      </SwiperSlide>
-
-      <SwiperSlide v-for="page in pages.data" :key="page.title" data-swiper-autoplay="3000">
-        <div class="h-screen w-full flex items-center justify-center background">
-          
-          <p class="text-white" v-html="page.body.processed"></p>
-          <nuxt-img preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${page.field_image.uri.url }`" /> 
-        </div>
-        
-      </SwiperSlide>
-
-
-
 
       <SwiperSlide v-for="sponsor in sponsorvideos.data" :key="sponsor.title" :data-swiper-autoplay="sponsor.field_duration">
-    <div class="h-screen w-full flex justify-center background">
+    <div class="h-full w-full flex items-center justify-center bg-black">
         <video width="1920" height="1080" autoplay loop muted>
           <source :src="`${ runtimeConfig.public.apiUrl }${mediavideos.data.find(x => x.id === sponsor.field_sponsorvideo.id).field_media_video_file.uri.url}`" type="video/mp4">
       </video>
