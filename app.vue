@@ -24,8 +24,11 @@
         }
       }"
     >
+    <SwiperSlide data-swiper-autoplay="3000">
+      <nuxt-img  preset="slide" src="~/static/background.webp" />
+    </SwiperSlide>
 
-    <SwiperSlide v-for="event in highlights.data" :key="event.title"  data-swiper-autoplay="9000">
+    <SwiperSlide v-for="event in highlights.data" :key="event.title"  data-swiper-autoplay="3000">
         <div class="flex bg-white justify-center background"  style="width: 1920px; height: 1080px;">
             <nuxt-img  preset="event" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" />
         <div class="space-y-2">
@@ -39,7 +42,7 @@
                         <div class="flex">{{ event.field_tags[0].name }}</div>
                         
                         <div class="flex">tijd nu: {{ formatTime(new Date().getTime()) }} uur</div>
-                        <div class="flex" :v-show="compareTime(event.field_aanvang,event.field_einde)">Yes!!!</div>
+                        <div class="flex">{{ compareTime(event.field_aanvang,event.field_einde) }}</div>
                         
                         
  
@@ -51,29 +54,29 @@
 
 
     <SwiperSlide v-for="sponsor in sponsorslides.data" :key="sponsor.title" data-swiper-autoplay="3000">
-        <div class="h-screen w-full flex items-center justify-center">
+        <div class="h-screen w-full flex items-center justify-center background">
           <nuxt-img preset="slide" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url}`" class="object-scale-down"/> 
         </div>
         
       </SwiperSlide>
 
       <SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="3000">
-        <div class="h-screen w-full">
-          <nuxt-img  preset="slide" :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" class="overflow-hidden"/> 
+        <div class="h-screen w-full flex items-center justify-center background">
+          <nuxt-img  preset="slide" :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" class="object-scale-down"/> 
         </div>
         
       </SwiperSlide>
 
 
       <SwiperSlide v-for="sponsor in sponsoren .data" :key="sponsor.title" data-swiper-autoplay="5000">
-        <div class="h-screen w-full flex items-center justify-center">
+        <div class="h-screen w-full flex items-center justify-center" background>
           <nuxt-img class="bg-white" preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> 
         </div>
         
       </SwiperSlide>
 
       <SwiperSlide v-for="page in pages.data" :key="page.title" data-swiper-autoplay="3000">
-        <div class="h-screen w-full flex items-center justify-center">
+        <div class="h-screen w-full flex items-center justify-center background">
           
           <p class="text-white" v-html="page.body.processed"></p>
           <nuxt-img preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${page.field_image.uri.url }`" /> 
@@ -85,8 +88,8 @@
 
 
       <SwiperSlide v-for="sponsor in sponsorvideos.data" :key="sponsor.title" :data-swiper-autoplay="sponsor.field_duration">
-    <div class="h-screen w-full justify-center">
-      <video width="1920" height="1080"  loop autoplay muted>
+    <div class="h-screen w-full flex justify-center background">
+      <video width="1920" height="1080" autoplay loop muted>
         <source :src="`${ runtimeConfig.public.apiUrl }${mediavideos.data.find(x => x.id === sponsor.field_sponsorvideo.id).field_media_video_file.uri.url}`" type="video/mp4">
     </video>
 
@@ -111,21 +114,26 @@ function formatTime(v) {
 function compareTime(aanvang_temp,einde_temp) {
   var show = '';
   var nu_temp = new Date();
-  var nu = nu_temp.getTime();
+  var nu = (nu_temp.getHours()*60) + nu_temp.getMinutes();
+
   var straks_temp = new Date();
-  var straks_temp = straks_temp.setHours(straks_temp.getHours()+1);
-  var straks = new Date(straks_temp).getTime();
-  var aanvang = new Date(aanvang_temp).getTime();
-  var einde = new Date(einde_temp).getTime();
+  var straks = ((straks_temp.getHours()+1)*60) + straks_temp.getMinutes();
+  var limiet_temp = new Date();
+  var limiet = ((limiet_temp.getHours()+2)*60) + limiet_temp.getMinutes();
+
+  aanvang_temp = new Date(aanvang_temp);
+  var aanvang = (aanvang_temp.getHours()*60) + aanvang_temp.getMinutes();
+  einde_temp = new Date(einde_temp);
+  var einde = (einde_temp.getHours()*60) + einde_temp.getMinutes();
 
   console.log('aanvang:  ' + aanvang);
   console.log('einde     ' + einde);
   console.log('tijd:     ' + nu);
   console.log('straks:   ' + straks);
-  if (((einde > nu) && (aanvang) < nu) )  { show = "nu bezig!";  }
-  if ((aanvang > nu) && (aanvang < nu)) { show = "straks!";  }
-  if ((aanvang > nu) ) { show = "Later";  }
-  if ((einde < nu) ) { show = "geweest!!!!";  }
+  if (((einde > nu) && (aanvang) < nu) )  { show = "Nu bezig!";  }
+  if ((aanvang > nu) && (aanvang < straks)) { show = "Straks!";  }
+  if ((aanvang > straks) && (einde < limiet)) { show = "Later";  }
+  if ((einde < nu) || (einde > limiet)) { show = "DoNotShow";  }
 
   console.log(show);
   
