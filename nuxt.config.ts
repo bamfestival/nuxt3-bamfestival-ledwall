@@ -39,8 +39,8 @@ export default defineNuxtConfig({
             event: {
               modifiers: {
                 format: 'webp',
-                width: 540,
-                heigth: 540,
+                width: 1001,
+                heigth: 1001,
                 fit: 'cover',
               }
             }
