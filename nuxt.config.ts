@@ -12,13 +12,14 @@ export default defineNuxtConfig({
         
                 public: {
                     apiUrl: "https://cms.bamfestival.nl",
+                    NumberSponsors: 8,
                 }
             },         
      tailwindcss: {
         viewer: false
       },
      image: {
-        domains: ['cms.bamfestival.nl'],
+        domains: ['cms.bamfestival.nl','zealous-beach-05723bb03.2.azurestaticapps.net'],
         presets: {
             slide: {
               modifiers: {

@@ -25,13 +25,13 @@
       }">
 
 <!-- Sponsor logo's-->
-<template v-for="i in 5">
+<template v-for="i in sponsorPages(sponsoren.data.length)">
    <SwiperSlide  data-swiper-autoplay="4000">
-        <div class="h-full w-full flex items-center justify-center">
-          <div v-for="(sponsor,index) in sponsoren.data.slice((i-1)*5, (i-1)*5+5)" :key="sponsor.title" ><nuxt-img class="bg-white" preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" /> </div>
-         
+        <div class="h-full w-full flex flex flex-wrap items-center justify-center gap-16 p-16 background">
+          <div class="" v-for="(sponsor,index) in sponsoren.data.slice((i-1)*runtimeConfig.public.NumberSponsors, (i-1)*runtimeConfig.NumberSponsors+runtimeConfig.public.NumberSponsors)" :key="sponsor.title" >
+            <nuxt-img class="bg-white h-96 w-96" preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" />
+          </div>
         </div>
-     
       </SwiperSlide >
 </template>   
 
@@ -104,20 +104,18 @@
     </template> 
     <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'Later'">
         <SwiperSlide data-swiper-autoplay="3000">
-            <div class="flex justify-center background"  style="width: 1920px; height: 1080px;" >
-                <nuxt-img  preset="event" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" />
-            <div class="space-y-2">
-                    <div class="space-y-1 font-large leading-6">
-                      <h3 class="font-bold uppercase text-white">{{ event.title }}</h3>
-                      <span class="font-interstate">{{ event.field_subtitle }}</span> 
-                            <div class="flex">{{ event.field_dag }}</div>
-                            <div class="flex">{{ event.field_location.name }}</div>
-                            <div class="flex">{{ new Date(event.field_aanvang).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" })  }} - {{ new Date(event.field_einde).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" }) }}</div>
-                            <div class="flex">{{ event.field_tags[0].name }}</div>
-                            <div class="flex">tijd nu: {{ formatTime(new Date().getTime()) }} uur</div>
-                            <div class="flex">{{ compareTime(event.field_aanvang,event.field_einde) }}</div>
-                    </div>
+          <div class="background h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
+              <div class="grid grid-cols-2 gap-24">
+                  
+                  <div class="flex flex-col justify-center gap-24 ml-24">
+                     <h1 class="font-serif text-8xl">Later</h1>
+                     <h2 class="font-interstate  font-bold uppercase text-8xl">{{ event.title }}</h2>
+                    <h3 class="font-interstate uppercase text-6xl">{{ event.field_location.name }}</h3>
+                    <h4 class="font-serif text-4xl">{{ new Date(event.field_aanvang).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" })  }} uur - {{ new Date(event.field_einde).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" }) }} uur</h4>
                   </div>
+                  <div class="mr-24 p-16"><nuxt-img  preset="event" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" /></div>
+
+                </div>
             </div>     
         </SwiperSlide>
     </template>  
@@ -140,7 +138,10 @@
 
 <script setup lang="ts">
 import consolaGlobalInstance from 'consola';
-
+function sponsorPages(v) 
+  {
+      return (v % runtimeConfig.public.NumberSponsors)+1;
+  }
 function formatTime(v) {
         
      var today = new Date(v).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" });
@@ -151,6 +152,7 @@ function compareTime(aanvang_temp,einde_temp) {
   var show = '';
   var nu_temp = new Date();
   var nu = (nu_temp.getHours()*60) + nu_temp.getMinutes();
+  var vandaag = nu_temp.getDay();
 
   var straks_temp = new Date();
   var straks = ((straks_temp.getHours()+1)*60) + straks_temp.getMinutes();
@@ -161,18 +163,20 @@ function compareTime(aanvang_temp,einde_temp) {
   var aanvang = (aanvang_temp.getHours()*60) + aanvang_temp.getMinutes();
   einde_temp = new Date(einde_temp);
   var einde = (einde_temp.getHours()*60) + einde_temp.getMinutes();
+  var dag_aanvang = aanvang_temp.getDay();
+  var dag_einde = einde_temp.getDay();
 
-  console.log('aanvang:  ' + aanvang);
-  console.log('einde     ' + einde);
-  console.log('tijd:     ' + nu);
-  console.log('straks:   ' + straks);
- 
+  console.log(dag_einde );
+  console.log('aanvang:  ' + aanvang + ' einde     ' + einde);
+
   if (((einde > nu) && (aanvang) < nu) )  { show = "NuBezig";  }
   if ((aanvang > nu) && (aanvang < straks)) { show = "Straks";  }
   if ((aanvang > straks) && (einde < limiet)) { show = "Later";  }
   if ((einde < nu) || (einde > limiet)) { show = "DoNotShow";  }
+  if ( (vandaag === 5) && (dag_aanvang === 6)   ) { show = "DoNotShow";  }
+  if ( (vandaag === 6) && (dag_aanvang === 5)   ) { show = "DoNotShow";  }
 
-  console.log(show);
+  console.log('Conclusie: -> ' + show);
   
   return show;
 }      
@@ -197,7 +201,7 @@ function timeOver(aanvang_temp,einde_temp) {
 
 
  const runtimeConfig = useRuntimeConfig();
- const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?filter[status][value]=1&filter[promote][value]=1&sort=field_dag,-field_weight,title&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
+ const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?filter[status][value]=1&filter[promote][value]=1&sort=field_dag,-field_aanvang&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
 
  const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&filter[promote][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NULL&filter[field_sponsorvideo][condition][path]=field_sponsor_slide&filter[field_sponsorvideo][condition][operator]=IS NULL");
  
