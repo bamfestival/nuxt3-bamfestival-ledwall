@@ -23,7 +23,7 @@ export default defineNuxtConfig({
         presets: {
             slide: {
               modifiers: {
-                format: 'webp',
+                
                 width: 1920,
                 heigth: 1080,
                 fit: 'inside',
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
             },
             sponsor: {
               modifiers: {
-                format: 'webp',
+                
                 width: 1024,
                 heigth: 1024,
                 fit: 'cover',
@@ -39,7 +39,7 @@ export default defineNuxtConfig({
             },
             event: {
               modifiers: {
-                format: 'webp',
+                
                 width: 1001,
                 heigth: 1001,
                 fit: 'cover',
@@ -53,8 +53,9 @@ export default defineNuxtConfig({
       pwa: {
         registerType: 'autoUpdate',
         manifest: {
-          name: 'Nuxt Vite PWA',
-          short_name: 'NuxtVitePWA',
+          name: 'BAM! LED-Wall',
+          short_name: 'BAMLEDwall',
+          description: 'Application for the BAM! LED-Wall',
           theme_color: '#ffffff',
           icons: [
             {

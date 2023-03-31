@@ -226,7 +226,7 @@ const { data:mediavideos } = await useFetch("https://cms.bamfestival.nl/jsonapi/
 <style>
 .background 
 {
-  background-image: url(~/static/Gradient_zaterdag.png);
+  background-image: url(~/assets/backgrounds/Gradient_zaterdag.png);
 }
 .swiper-wrapper {
   min-width: 100vh;
