@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    
+    ssr: true,
+    target: 'static',
     
      modules: [
         '@nuxtjs/tailwindcss',
@@ -23,25 +24,28 @@ export default defineNuxtConfig({
         presets: {
             slide: {
               modifiers: {
-                format: "jpg",
+                format: "webp",
                 width: 1920,
                 heigth: 1080,
+                quality: 85,
                 fit: 'inside',
               }
             },
             sponsor: {
               modifiers: {
-                format: "jpg",
+                format: "webp",
                 width: 1024,
                 heigth: 1024,
+                quality: 90,
                 fit: 'cover',
               }
             },
             event: {
               modifiers: {
-                format: "jpg",
+                format: "webp",
                 width: 1001,
                 heigth: 1001,
+                quality: 80,
                 fit: 'cover',
               }
             }
