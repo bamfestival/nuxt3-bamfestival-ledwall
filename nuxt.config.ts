@@ -23,7 +23,7 @@ export default defineNuxtConfig({
         presets: {
             slide: {
               modifiers: {
-                
+                format: "jpg",
                 width: 1920,
                 heigth: 1080,
                 fit: 'inside',
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
             },
             sponsor: {
               modifiers: {
-                
+                format: "jpg",
                 width: 1024,
                 heigth: 1024,
                 fit: 'cover',
@@ -39,7 +39,7 @@ export default defineNuxtConfig({
             },
             event: {
               modifiers: {
-                
+                format: "jpg",
                 width: 1001,
                 heigth: 1001,
                 fit: 'cover',
