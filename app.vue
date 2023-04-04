@@ -220,6 +220,7 @@ function timeBedankt() {
    var nu = (nu_temp.getHours()*60) + nu_temp.getMinutes();
    var vandaag = nu_temp.getDay();
    console.log(nu);
+   // Zaterdag: vandaag === 6   23:59 > 1439 
    if ((vandaag === 2) && (nu > 1385)) { bedankt = true; }
   return bedankt;
 }

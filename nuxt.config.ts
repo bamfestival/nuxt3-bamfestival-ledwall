@@ -60,6 +60,7 @@ export default defineNuxtConfig({
           name: 'BAM! LED-Wall',
           short_name: 'BAMLEDwall',
           description: 'Application for the BAM! LED-Wall',
+          display: 'fullscreen',
           theme_color: '#ffffff',
           icons: [
             {
