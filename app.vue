@@ -44,20 +44,6 @@
   </template>   
 </template>
 
-<!-- Pages -->
-<template v-if="!timeBedankt()">
-    <SwiperSlide v-for="page in pages.data" :key="page.title" data-swiper-autoplay="9000">
-            <div class="h-full w-full flex items-center justify-center background">
-              <div class="grid grid-flow-row auto-rows-max gap-8 p-16">
-                <div class="justify-center"><nuxt-img format="webp" height="200" width="auto" :src="`${ runtimeConfig.public.apiUrl }${page.field_image.uri.url }`" /> </div>
-                <div class=""><h1 class="text-6xl">{{  page.title }}</h1></div>
-                <div class="text-black text-2xl" v-html="page.body.processed"></div>
-              </div>
-            </div>
-            
-          </SwiperSlide>
-    </template>
-
 <!-- bannners -->
 <template v-if="!timeBedankt()">
     <SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="3000">
@@ -136,7 +122,7 @@
   </template> 
 </template>
 
-
+<!-- Sponsor Video's -->
 <template v-if="!timeBedankt()">
     <SwiperSlide v-for="sponsor in sponsorvideos.data" :key="sponsor.title" :data-swiper-autoplay="sponsor.field_duration">
       <div class="h-full w-full flex items-center justify-center bg-black">
@@ -154,8 +140,10 @@
 <script setup lang="ts">
 import consolaGlobalInstance from 'consola';
 function sponsorPages(v) 
-  {
-      return (v % runtimeConfig.public.NumberSponsors)+1;
+  {   var pages = Math.ceil(v / runtimeConfig.public.NumberSponsors);
+      
+      console.log('nr of sponsors: ' + v + ' / 8  = pages: ' + pages);
+      return pages;
   }
 function formatTime(v) {
         
@@ -226,10 +214,10 @@ function timeBedankt() {
 }
 
  const runtimeConfig = useRuntimeConfig();
- const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?filter[status][value]=1&filter[promote][value]=1&sort=field_dag,-field_aanvang&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
+ const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?sort=field_dag,-field_aanvang&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
  const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NULL&filter[field_sponsorvideo][condition][path]=field_sponsor_slide&filter[field_sponsorvideo][condition][operator]=IS NULL");
  const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?jsonapi_include=1&field_visibility[value]=LED&include=field_image,field_media");
- const { data:pages } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/page?jsonapi_include=1&field_visibility[value]=LED&include=field_image");
+ 
  const { data:sponsorslides } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&sort=-field_weight,title&include=field_sponsor_slide&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NOT NULL");
  const { data:sponsorvideos } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&sort=-field_weight,title&include=field_sponsorvideo&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsorvideo][condition][path]=field_sponsorvideo&filter[field_sponsorvideo][condition][operator]=IS NOT NULL");
  const { data:mediavideos } = await useFetch("https://cms.bamfestival.nl/jsonapi/media/video/?include=field_media_video_file&jsonapi_include=1");
