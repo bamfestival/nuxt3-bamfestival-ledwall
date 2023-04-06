@@ -1,7 +1,7 @@
 <!-- https://swiperjs.com / https://swiperjs.com/element -->
 <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString -->
 <template>
-  <div class="bg-black w-full h-full"  style="max-width: 1920px; max-height: 1080px;">
+  <div class="bg-black"  style="width: 1920px; height: 1080px;">
     <VitePwaManifest />
     <NuxtLoadingIndicator />
     <Swiper
@@ -24,18 +24,30 @@
         }
       }">
 <!-- Bedankt dat je er was -->
-<template v-if="timeBedankt()" :key="timeBedankt()">
+<template v-if="timeBedankt()">
   <SwiperSlide>
     <div class="background h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
       <img src="~/assets/images/BedanktDatjeErWas2023.png" class="w-full h-full">
     </div>
   </SwiperSlide>
 </template>
+<!-- Tijd in beeld  -->
+<template v-if="!timeBedankt()">
+  <SwiperSlide  data-swiper-autoplay="5000">
+  <div class="w-full h-full flex items-center justify-center"  style="width: 1920px; height: 1080px;">
+        <div class="text-red-800 text-center">
+          <div class="text-9xl font-black">
+          <span id="hours">00</span>:<span id="minutes">00</span><span> uur</span>
+        </div>
+        </div>
+  </div>
+  </SwiperSlide>
+</template>
 <!-- Sponsor logo's-->
-<template v-if="!timeBedankt()" :key="timeBedankt()">
+<template v-if="!timeBedankt()">
   <template v-for="i in sponsorPages(sponsoren.data.length)">
-    <SwiperSlide  data-swiper-autoplay="4000">
-          <div class="h-full w-full flex flex flex-wrap items-center justify-center gap-16 p-16 background">
+    <SwiperSlide  data-swiper-autoplay="6000">
+          <div class="h-full w-full flex flex flex-wrap items-center justify-center gap-16 p-16 background-crowd">
             <div class="" v-for="(sponsor,index) in sponsoren.data.slice((i-1)*runtimeConfig.public.NumberSponsors, (i-1)*runtimeConfig.NumberSponsors+runtimeConfig.public.NumberSponsors)" :key="sponsor.title" >
               <nuxt-img class="bg-white h-96 w-96 shadow-2xl" preset="sponsor" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_image.uri.url }`" />
             </div>
@@ -46,7 +58,7 @@
 
 <!-- bannners -->
 <template v-if="!timeBedankt()">
-    <SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="3000">
+    <SwiperSlide v-for="banner in banners.data" :key="banner.title" data-swiper-autoplay="4500">
             <div class="h-full w-full flex items-center justify-center bg-black">
               <nuxt-img  preset="slide" :src="`${ runtimeConfig.public.apiUrl }${banner.field_image.uri.url }`" class="object-scale-down"/> 
             </div>
@@ -56,7 +68,7 @@
 
   <!-- Sponsor Slide-->
 <template v-if="!timeBedankt()">
-    <SwiperSlide v-for="sponsor in sponsorslides.data" :key="sponsor.title" data-swiper-autoplay="3000">
+    <SwiperSlide v-for="sponsor in sponsorslides.data" :key="sponsor.title" data-swiper-autoplay="3400">
           <div class="h-full w-full flex items-center justify-center bg-black">
             <nuxt-img preset="slide" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url}`"/> 
           </div>
@@ -65,11 +77,11 @@
 <!--  -->
 <!-- Nu bezig / straks -->
 <template v-if="!timeBedankt()">
- <template v-for="event in highlights.data" :key="event.title" >
+ <template v-for="event in highlights.data" :key="swiperKey">
    <template  v-if="compareTime(event.field_aanvang,event.field_einde) != 'DoNotShow'">
     <!-- Nu bezig -->
     <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'NuBezig'">
-        <SwiperSlide data-swiper-autoplay="3000">
+        <SwiperSlide data-swiper-autoplay="4000">
             <div class="background h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
               <div class="grid grid-cols-2 gap-24">
                   <div class="ml-24 p-16"><nuxt-img  class="shadow-2xl" preset="event" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" /></div>
@@ -77,7 +89,7 @@
                      <h1 class="font-serif text-8xl">Nu bezig</h1>
                      <h2 class="font-interstate  font-bold uppercase text-8xl">{{ event.title }}</h2>
                     <h3 class="font-interstate uppercase text-6xl">{{ event.field_location.name }}</h3>
-                    <h4 v-show="timeOver(event.field_aanvang,event.field_einde) > 5" class="font-serif text-4xl">Nog {{ timeOver(event.field_aanvang,event.field_einde)}} minuten ...</h4>
+                    <h4 v-show="timeOver(event.field_aanvang,event.field_einde) > 5" class="font-serif text-5xl">Nog {{ timeOver(event.field_aanvang,event.field_einde)}} minuten ...</h4>
                   </div>
 
                 </div>
@@ -85,12 +97,12 @@
         </SwiperSlide>
     </template>
     <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'Straks'">
-        <SwiperSlide data-swiper-autoplay="3000">
+        <SwiperSlide data-swiper-autoplay="4000">
           <div class="background h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
               <div class="grid grid-cols-2 gap-24">
                   
                   <div class="flex flex-col justify-center gap-24 ml-24">
-                     <h1 class="font-serif text-8xl">Zometeen</h1>
+                     <h1 class="font-serif text-8xl">Zo meteen</h1>
                      <h2 class="font-interstate  font-bold uppercase text-8xl">{{ event.title }}</h2>
                     <h3 class="font-interstate uppercase text-6xl">{{ event.field_location.name }}</h3>
                     <h4 class="font-serif text-4xl">{{ new Date(event.field_aanvang).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" })  }} uur - {{ new Date(event.field_einde).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" }) }} uur</h4>
@@ -102,8 +114,8 @@
         </SwiperSlide>
     </template> 
     <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'Later'">
-        <SwiperSlide data-swiper-autoplay="3000">
-          <div class="background h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
+        <SwiperSlide data-swiper-autoplay="4000">
+          <div class="background-vrijdag h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
               <div class="grid grid-cols-2 gap-24">
                   
                   <div class="flex flex-col justify-center gap-24 ml-24">
@@ -138,7 +150,9 @@
 </template>
 
 <script setup lang="ts">
+import { NUMBER_BINARY_OPERATORS } from '@babel/types';
 import consolaGlobalInstance from 'consola';
+
 useHead({
   title: 'BAM! Festival LED Wall Application',
   meta: [
@@ -152,9 +166,17 @@ useHead({
   script: [ { innerHTML: 'console.log(\'BAM! LED Wall starting ...\')' } ]
 })
 
+function updateTime() {
+  var date = new Date();
+  var hours = date.getHours().toString().padStart(2, '0');
+  var minutes = date.getMinutes().toString().padStart(2, '0');
+  document.getElementById('hours').textContent = hours;
+  document.getElementById('minutes').textContent = minutes;
+}
 
+setInterval(updateTime, 1000);
 
-function sponsorPages(v) 
+function sponsorPages(v): number 
   {   var pages = Math.ceil(v / runtimeConfig.public.NumberSponsors);
       
       return pages;
@@ -183,8 +205,6 @@ function compareTime(aanvang_temp,einde_temp) {
   var einde = (einde_temp.getHours()*60) + einde_temp.getMinutes();
   var dag_aanvang = aanvang_temp.getDay();
   var dag_einde = einde_temp.getDay();
-
- 
 
   if (((einde > nu) && (aanvang) < nu) )  { show = "NuBezig";  }
   if ((aanvang > nu) && (aanvang < straks)) { show = "Straks";  }
@@ -217,6 +237,7 @@ function timeOver(aanvang_temp,einde_temp) {
 }
 
 function timeBedankt() {
+  this.swiperKey++;
    var bedankt = false;
    var nu_temp = new Date();
    var nu = (nu_temp.getHours()*60) + nu_temp.getMinutes();
@@ -228,6 +249,7 @@ function timeBedankt() {
 }
 
  const runtimeConfig = useRuntimeConfig();
+ const swiperKey = ref(0);
  const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?sort=field_dag,-field_aanvang&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
  const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NULL&filter[field_sponsorvideo][condition][path]=field_sponsor_slide&filter[field_sponsorvideo][condition][operator]=IS NULL");
  const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?jsonapi_include=1&field_visibility[value]=LED&include=field_image,field_media");
@@ -243,6 +265,15 @@ function timeBedankt() {
 {
   background-image: url(~/assets/backgrounds/Gradient_zaterdag.png);
 }
+.background-vrijdag 
+{
+  background-image: url(~/assets/backgrounds/Gradient_vrijdag.png);
+}
+.background-crowd 
+{
+  background-image: url(~/assets/backgrounds/background-crowd.jpg);
+}
+
 .swiper-wrapper {
   min-width: 100vh;
   width: 100vh;
