@@ -1,8 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    ssr: false,
-    target: 'static',
-    
+    ssr: true,
+        
      modules: [
         '@nuxtjs/tailwindcss',
         '@nuxt/image-edge',
@@ -56,6 +55,11 @@ export default defineNuxtConfig({
       },
       pwa: {
         registerType: 'autoUpdate',
+        meta: {
+          author: 'Ronald Punt',
+          description: 'LED Wall app for BAM! Festival Hengelo',
+          theme_color: '#ffd827'
+        },
         manifest: {
           name: 'BAM! LED-Wall',
           short_name: 'BAMLEDwall',
