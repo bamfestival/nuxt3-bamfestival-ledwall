@@ -36,7 +36,8 @@
   <SwiperSlide  data-swiper-autoplay="5000">
   <div class="w-full h-full flex items-center justify-center"  style="width: 1920px; height: 1080px;">
         <div class="text-red-800 text-center">
-          <div class="text-9xl font-black">
+          <div class="text-9xl font-black tracking-wider">
+            <span class="text-6xl mb-2">Het is nu..</span><br/><br/>  
           <span id="hours">00</span>:<span id="minutes">00</span><span> uur</span>
         </div>
         </div>
@@ -170,7 +171,7 @@ function updateTime() {
   document.getElementById('minutes').textContent = minutes;
 }
 
-setInterval(updateTime, 1000);
+setInterval(updateTime, 6000);
 
 function sponsorPages(v): number 
   {   var pages = Math.ceil(v / runtimeConfig.public.NumberSponsors);

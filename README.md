@@ -44,19 +44,20 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 ## Volgorde sheets
 
 1. Bedankt dat je er was (Zondag na 23:59 uur)
-2. Sponsor Logo's
-3. Banners (cash betalen, plattegrond)
-4. Sponsor Slides (Full page sponsor uitingen)
-5. Nu Bezig
-6. Straks
-7. Later
-8. Sponsor videos
+2. Time
+3. Sponsor Logo's
+4. Banners (cash betalen, plattegrond)
+5. Sponsor Slides (Full page sponsor uitingen)
+6. Nu Bezig
+7. Straks
+8. Later
+9. Sponsor videos
 
 ## Links
 
 - https://nuxtjs.org/deployments/pm2/
 - https://pm2.keymetrics.io/docs/usage/application-declaration/#general
-+
+
 - https://github.com/cpreston321/nuxt-swiper
 - https://swiperjs.com
 
