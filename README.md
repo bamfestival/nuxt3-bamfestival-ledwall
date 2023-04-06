@@ -56,9 +56,10 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 - https://nuxtjs.org/deployments/pm2/
 - https://pm2.keymetrics.io/docs/usage/application-declaration/#general
-- https://www.cloudpanel.io/docs/v2/nodejs/deployment/pm2/
++
 - https://github.com/cpreston321/nuxt-swiper
 - https://swiperjs.com
 
 - https://tailwindcss.nuxtjs.org
 - https://image.nuxtjs.org
+- https://image.nuxtjs.org/getting-started/installation#troubleshooting

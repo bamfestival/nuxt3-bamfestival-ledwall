@@ -1,7 +1,7 @@
 <!-- https://swiperjs.com / https://swiperjs.com/element -->
 <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString -->
 <template>
-  <div class="bg-black"  style="width: 1920px; height: 1080px;">
+  <div class="bg-black w-full h-full"  style="max-width: 1920px; max-height: 1080px;">
     <VitePwaManifest />
     <NuxtLoadingIndicator />
     <Swiper
@@ -139,10 +139,24 @@
 
 <script setup lang="ts">
 import consolaGlobalInstance from 'consola';
+useHead({
+  title: 'BAM! Festival LED Wall Application',
+  meta: [
+    { name: 'description', content: 'LED Wall application used on the BAM! Festival Hengelo (Ov.).',
+      name: 'theme-color', content: '#ffd827'   
+  }
+  ],
+  bodyAttrs: {
+    class: 'test'
+  },
+  script: [ { innerHTML: 'console.log(\'BAM! LED Wall starting ...\')' } ]
+})
+
+
+
 function sponsorPages(v) 
   {   var pages = Math.ceil(v / runtimeConfig.public.NumberSponsors);
       
-      console.log('nr of sponsors: ' + v + ' / 8  = pages: ' + pages);
       return pages;
   }
 function formatTime(v) {
