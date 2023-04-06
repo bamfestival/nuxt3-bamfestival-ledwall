@@ -77,7 +77,7 @@
 <!--  -->
 <!-- Nu bezig / straks -->
 <template v-if="!timeBedankt()">
- <template v-for="event in highlights.data" :key="swiperKey">
+ <template v-for="event in highlights.data" :key="highlights.title">
    <template  v-if="compareTime(event.field_aanvang,event.field_einde) != 'DoNotShow'">
     <!-- Nu bezig -->
     <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'NuBezig'">
@@ -155,11 +155,7 @@ import consolaGlobalInstance from 'consola';
 
 useHead({
   title: 'BAM! Festival LED Wall Application',
-  meta: [
-    { name: 'description', content: 'LED Wall application used on the BAM! Festival Hengelo (Ov.).',
-      name: 'theme-color', content: '#ffd827'   
-  }
-  ],
+  
   bodyAttrs: {
     class: 'test'
   },
@@ -237,7 +233,7 @@ function timeOver(aanvang_temp,einde_temp) {
 }
 
 function timeBedankt() {
-  this.swiperKey++;
+  
    var bedankt = false;
    var nu_temp = new Date();
    var nu = (nu_temp.getHours()*60) + nu_temp.getMinutes();
@@ -247,10 +243,13 @@ function timeBedankt() {
    if ((vandaag === 2) && (nu > 1385)) { bedankt = true; }
   return bedankt;
 }
+  setInterval(compareTime, 1000);
+  setInterval(timeOver, 1000);
+  setInterval(timeBedankt, 1000);
 
  const runtimeConfig = useRuntimeConfig();
- const swiperKey = ref(0);
- const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?sort=field_dag,-field_aanvang&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
+ 
+ const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?sort=field_dag,-field_aanvang,title&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
  const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NULL&filter[field_sponsorvideo][condition][path]=field_sponsor_slide&filter[field_sponsorvideo][condition][operator]=IS NULL");
  const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?jsonapi_include=1&field_visibility[value]=LED&include=field_image,field_media");
  
