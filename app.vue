@@ -37,8 +37,8 @@
   <div class="w-full h-full flex items-center justify-center"  style="width: 1920px; height: 1080px;">
         <div class="text-red-800 text-center">
           <div class="text-9xl font-black tracking-wider">
-            <span class="text-6xl mb-2">Het is nu..</span><br/><br/>  
-          <span id="hours">00</span>:<span id="minutes">00</span><span> uur</span>
+            
+          <span class="">{{  updateTime() }}</span>
         </div>
         </div>
   </div>
@@ -69,7 +69,7 @@
 
   <!-- Sponsor Slide-->
 <template v-if="!timeBedankt()">
-    <SwiperSlide v-for="sponsor in sponsorslides.data" :key="sponsor.title" data-swiper-autoplay="3400">
+    <SwiperSlide v-for="sponsor in sponsorslides.data" :key="refreshKey" data-swiper-autoplay="3400">
           <div class="h-full w-full flex items-center justify-center bg-black">
             <nuxt-img preset="slide" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url}`"/> 
           </div>
@@ -78,7 +78,7 @@
 <!--  -->
 <!-- Nu bezig / straks -->
 <template v-if="!timeBedankt()">
- <template v-for="event in highlights.data" :key="highlights.title">
+ <template v-for="event in highlights.data" :key="refreshKey">
    <template  v-if="compareTime(event.field_aanvang,event.field_einde) != 'DoNotShow'">
     <!-- Nu bezig -->
     <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'NuBezig'">
@@ -116,7 +116,7 @@
     </template> 
     <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'Later'">
         <SwiperSlide data-swiper-autoplay="4000">
-          <div class="background-vrijdag h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
+          <div class="background  h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
               <div class="grid grid-cols-2 gap-24">
                   
                   <div class="flex flex-col justify-center gap-24 ml-24">
@@ -167,11 +167,10 @@ function updateTime() {
   var date = new Date();
   var hours = date.getHours().toString().padStart(2, '0');
   var minutes = date.getMinutes().toString().padStart(2, '0');
-  document.getElementById('hours').textContent = hours;
-  document.getElementById('minutes').textContent = minutes;
+  return hours+':'+minutes;
 }
 
-setInterval(updateTime, 6000);
+
 
 function sponsorPages(v): number 
   {   var pages = Math.ceil(v / runtimeConfig.public.NumberSponsors);
@@ -186,7 +185,7 @@ function formatTime(v) {
 
 function compareTime(aanvang_temp,einde_temp) {
   var show = '';
-  var limiet_uren = 4;
+  var limiet_uren = 2;
   var nu_temp = new Date();
   var nu = (nu_temp.getHours()*60) + nu_temp.getMinutes();
   var vandaag = nu_temp.getDay();
@@ -210,7 +209,7 @@ function compareTime(aanvang_temp,einde_temp) {
   if ( (vandaag === 5) && (dag_aanvang === 6)   ) { show = "DoNotShow";  }
   if ( (vandaag === 6) && (dag_aanvang === 5)   ) { show = "DoNotShow";  }
 
-  
+  console.log(show);
   
   return show;
 }      
@@ -241,11 +240,13 @@ function timeBedankt() {
    var vandaag = nu_temp.getDay();
    console.log(nu);
    // Zaterdag: vandaag === 6   23:59 > 1439 
-   if ((vandaag === 2) && (nu > 1385)) { bedankt = true; }
+   if ((vandaag === 6) && (nu > 1385)) { bedankt = true; }
   return bedankt;
 }
-  setInterval(compareTime, 1000);
-  setInterval(timeOver, 1000);
+function refreshKey() {
+      return Date.now()
+    }
+
   setInterval(timeBedankt, 1000);
 
  const runtimeConfig = useRuntimeConfig();
