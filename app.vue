@@ -6,8 +6,9 @@
     <NuxtLoadingIndicator />
     <Swiper
       class="h-full"
+      ref="swiperRef"
       :modules="[SwiperAutoplay, SwiperEffectCreative]"
-      :slides-per-view="1"
+      :slides-per-view="auto"
       :loop="true"
       :effect="'creative'"
       :autoplay="{
@@ -31,19 +32,7 @@
     </div>
   </SwiperSlide>
 </template>
-<!-- Tijd in beeld  -->
-<template v-if="!timeBedankt()">
-  <SwiperSlide  data-swiper-autoplay="5000">
-  <div class="w-full h-full flex items-center justify-center"  style="width: 1920px; height: 1080px;">
-        <div class="text-red-800 text-center">
-          <div class="text-9xl font-black tracking-wider">
-            
-          <span class="">{{  updateTime() }}</span>
-        </div>
-        </div>
-  </div>
-  </SwiperSlide>
-</template>
+
 <!-- Sponsor logo's-->
 <template v-if="!timeBedankt()">
   <template v-for="i in sponsorPages(sponsoren.data.length)">
@@ -69,7 +58,7 @@
 
   <!-- Sponsor Slide-->
 <template v-if="!timeBedankt()">
-    <SwiperSlide v-for="sponsor in sponsorslides.data" :key="refreshKey" data-swiper-autoplay="3400">
+    <SwiperSlide v-for="sponsor in sponsorslides.data" data-swiper-autoplay="3400">
           <div class="h-full w-full flex items-center justify-center bg-black">
             <nuxt-img preset="slide" :src="`${ runtimeConfig.public.apiUrl }${sponsor.field_sponsor_slide.uri.url}`"/> 
           </div>
@@ -78,62 +67,30 @@
 <!--  -->
 <!-- Nu bezig / straks -->
 <template v-if="!timeBedankt()">
- <template v-for="event in highlights.data" :key="refreshKey">
-   <template  v-if="compareTime(event.field_aanvang,event.field_einde) != 'DoNotShow'">
+ <template v-for="event in highlights.data" :key="event.title" >
+   
     <!-- Nu bezig -->
-    <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'NuBezig'">
-        <SwiperSlide data-swiper-autoplay="4000">
-            <div class="background h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
+    <template   v-if="compareTime(event.field_aanvang,event.field_einde,event.title ) != 'DoNotShow'" :key="updateTime()" >
+        <SwiperSlide data-swiper-autoplay="4000" v-if="compareTime(event.field_aanvang,event.field_einde,event.title ) != 'DoNotShow'">
+            <div class="background h-full w-full flex items-center"  style="width: 1920px; height: 1080px;">
               <div class="grid grid-cols-2 gap-24">
                   <div class="ml-24 p-16"><nuxt-img  class="shadow-2xl" preset="event" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" /></div>
                   <div class="flex flex-col justify-center gap-24">
-                     <h1 class="font-serif text-8xl">Nu bezig</h1>
+                     <h1 class="font-serif text-8xl">{{ compareTime(event.field_aanvang,event.field_einde,event.title )  }} <span class="">{{  updateTime() }} </span></h1>
                      <h2 class="font-interstate  font-bold uppercase text-8xl">{{ event.title }}</h2>
                     <h3 class="font-interstate uppercase text-6xl">{{ event.field_location.name }}</h3>
-                    <h4 v-show="timeOver(event.field_aanvang,event.field_einde) > 5" class="font-serif text-5xl">Nog {{ timeOver(event.field_aanvang,event.field_einde)}} minuten ...</h4>
+                    <h4 v-if="compareTime(event.field_aanvang,event.field_einde,event.title ) != 'Nu bezig'" class="font-serif text-4xl"><span>{{ new Date(event.field_aanvang).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" })  }} uur - {{ new Date(event.field_einde).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" }) }} uur</span></h4>
+                    <h4 v-if="compareTime(event.field_aanvang,event.field_einde,event.title ) === 'Nu bezig'"><span v-if="timeOver(event.field_aanvang,event.field_einde, event.title) > 4" class="font-serif text-5xl">Nog {{ timeOver(event.field_aanvang,event.field_einde)}} minuten ...</span></h4>
                   </div>
 
                 </div>
             </div>    
         </SwiperSlide>
     </template>
-    <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'Straks'">
-        <SwiperSlide data-swiper-autoplay="4000">
-          <div class="background h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
-              <div class="grid grid-cols-2 gap-24">
-                  
-                  <div class="flex flex-col justify-center gap-24 ml-24">
-                     <h1 class="font-serif text-8xl">Zo meteen</h1>
-                     <h2 class="font-interstate  font-bold uppercase text-8xl">{{ event.title }}</h2>
-                    <h3 class="font-interstate uppercase text-6xl">{{ event.field_location.name }}</h3>
-                    <h4 class="font-serif text-4xl">{{ new Date(event.field_aanvang).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" })  }} uur - {{ new Date(event.field_einde).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" }) }} uur</h4>
-                  </div>
-                  <div class="mr-24 p-16"><nuxt-img   class="shadow-2xl" preset="event" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" /></div>
-
-                </div>
-            </div>   
-        </SwiperSlide>
-    </template> 
-    <template v-if="compareTime(event.field_aanvang,event.field_einde) === 'Later'">
-        <SwiperSlide data-swiper-autoplay="4000">
-          <div class="background  h-full w-full flex items-center"  style="width: 1920px; height: 1080px;" >
-              <div class="grid grid-cols-2 gap-24">
-                  
-                  <div class="flex flex-col justify-center gap-24 ml-24">
-                     <h1 class="font-serif text-8xl">Later</h1>
-                     <h2 class="font-interstate  font-bold uppercase text-8xl">{{ event.title }}</h2>
-                    <h3 class="font-interstate uppercase text-6xl">{{ event.field_location.name }}</h3>
-                    <h4 class="font-serif text-4xl">{{ new Date(event.field_aanvang).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" })  }} uur - {{ new Date(event.field_einde).toLocaleTimeString('nl-NL',{ hour: "2-digit", minute: "2-digit" }) }} uur</h4>
-                  </div>
-                  <div class="mr-24 p-16"><nuxt-img   class="shadow-2xl" preset="event" :src="`${ runtimeConfig.public.apiUrl }${event.field_image_portrait.uri.url }`"  :alt="`${ event.title }, op BAM! Festival Hengelo (Ov.)`" /></div>
-
-                </div>
-            </div>     
-        </SwiperSlide>
-    </template>  
+ 
    </template> 
   </template> 
-</template>
+
 
 <!-- Sponsor Video's -->
 <template v-if="!timeBedankt()">
@@ -154,6 +111,8 @@
 import { NUMBER_BINARY_OPERATORS } from '@babel/types';
 import consolaGlobalInstance from 'consola';
 
+
+
 useHead({
   title: 'BAM! Festival LED Wall Application',
   
@@ -167,6 +126,8 @@ function updateTime() {
   var date = new Date();
   var hours = date.getHours().toString().padStart(2, '0');
   var minutes = date.getMinutes().toString().padStart(2, '0');
+  
+
   return hours+':'+minutes;
 }
 
@@ -183,38 +144,46 @@ function formatTime(v) {
      return today;   
       }
 
-function compareTime(aanvang_temp,einde_temp) {
+function compareTime(aanvang_temp,einde_temp,title) {
   var show = '';
-  var limiet_uren = 2;
+  var limiet_uren = 16;
   var nu_temp = new Date();
   var nu = (nu_temp.getHours()*60) + nu_temp.getMinutes();
+  if ((nu_temp.getHours()) === 0) { nu += 24*60; }
   var vandaag = nu_temp.getDay();
 
   var straks_temp = new Date();
   var straks = ((straks_temp.getHours()+1)*60) + straks_temp.getMinutes();
   var limiet_temp = new Date();
   var limiet = ((limiet_temp.getHours()+limiet_uren)*60) + limiet_temp.getMinutes();
+  if ((limiet_temp.getHours()) === 0 ) { limiet += 24*60; }
 
   aanvang_temp = new Date(aanvang_temp);
   var aanvang = (aanvang_temp.getHours()*60) + aanvang_temp.getMinutes();
+  if ((aanvang_temp.getHours()) === 0) { aanvang += 24*60; }
+
   einde_temp = new Date(einde_temp);
   var einde = (einde_temp.getHours()*60) + einde_temp.getMinutes();
+  if ((einde_temp.getHours()) === 0) { einde += 24*60; }
   var dag_aanvang = aanvang_temp.getDay();
   var dag_einde = einde_temp.getDay();
 
-  if (((einde > nu) && (aanvang) < nu) )  { show = "NuBezig";  }
-  if ((aanvang > nu) && (aanvang < straks)) { show = "Straks";  }
+  
+  
+  if (((einde > nu) && (aanvang) < nu) )  { show = "Nu bezig";  }
+  if ((aanvang > nu) && (aanvang < straks)) { show = "Zo meteen";  }
   if ((aanvang > straks) && (einde < limiet)) { show = "Later";  }
   if ((einde < nu) || (einde > limiet)) { show = "DoNotShow";  }
   if ( (vandaag === 5) && (dag_aanvang === 6)   ) { show = "DoNotShow";  }
   if ( (vandaag === 6) && (dag_aanvang === 5)   ) { show = "DoNotShow";  }
 
-  console.log(show);
+  console.log(title+": "+show);
+  
   
   return show;
 }      
-function timeOver(aanvang_temp,einde_temp) {
-  var leftover =0;
+function timeOver(aanvang_temp,einde_temp,title) {
+  var leftover = 0;
   var nu_temp = new Date();
   var nu = (nu_temp.getHours()*60) + nu_temp.getMinutes();
 
@@ -229,6 +198,7 @@ function timeOver(aanvang_temp,einde_temp) {
   var einde = (einde_temp.getHours()*60) + einde_temp.getMinutes();
 
   leftover = einde-nu;
+  console.log(title + leftover + 'minuten over');
   return leftover;
 }
 
@@ -240,17 +210,15 @@ function timeBedankt() {
    var vandaag = nu_temp.getDay();
    console.log(nu);
    // Zaterdag: vandaag === 6   23:59 > 1439 
-   if ((vandaag === 6) && (nu > 1385)) { bedankt = true; }
+   if ((vandaag === 6) && (nu > 1439)) { bedankt = true; }
   return bedankt;
 }
-function refreshKey() {
-      return Date.now()
-    }
 
-  setInterval(timeBedankt, 1000);
+
+  
 
  const runtimeConfig = useRuntimeConfig();
- 
+
  const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?sort=field_dag,-field_aanvang,title&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
  const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NULL&filter[field_sponsorvideo][condition][path]=field_sponsor_slide&filter[field_sponsorvideo][condition][operator]=IS NULL");
  const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?jsonapi_include=1&field_visibility[value]=LED&include=field_image,field_media");
@@ -276,8 +244,8 @@ function refreshKey() {
 }
 
 .swiper-wrapper {
-  min-width: 100vh;
-  width: 100vh;
+  width: 1920px;
+  height: 1080px;
 }
 
 .bam-purple 
