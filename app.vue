@@ -1,7 +1,7 @@
 <!-- https://swiperjs.com / https://swiperjs.com/element -->
 <!-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString -->
 <template>
-  <div class="bg-black"  style="width: 1920px; height: 1080px;">
+  <div class="bg-white"  style="width: 1920px; height: 1080px;">
     <VitePwaManifest />
     <NuxtLoadingIndicator />
     <Swiper
@@ -67,7 +67,7 @@
 <!--  -->
 <!-- Nu bezig / straks -->
 <template v-if="!timeBedankt()">
- <template v-for="event in highlights.data" :key="event.title" >
+ <template v-for="event in events" :key="event.title" >
    
     <!-- Nu bezig -->
     <template   v-if="compareTime(event.field_aanvang,event.field_einde,event.title ) != 'DoNotShow'" :key="updateTime()" >
@@ -110,8 +110,38 @@
 <script setup lang="ts">
 import { NUMBER_BINARY_OPERATORS } from '@babel/types';
 import consolaGlobalInstance from 'consola';
+import { storeToRefs } from 'pinia';
+import { useEventsStore } from '~/store/events';
+const runtimeConfig = useRuntimeConfig();
+const store = useEventsStore();
+const { fetchEvents } = store; // have all non reactiave stuff here
+const { events } = storeToRefs(store); // have all reactive states here
 
+await fetchEvents();
 
+var vandaag = 0;
+    var nu = new Date();
+    var dag = new Date().getDay();
+    if (dag === 5) 
+      { 
+        console.log('Vrijdag');
+        vandaag = new Date(2023,4,20,nu.getHours(),nu.getMinutes(),nu.getSeconds());
+        console.log(vandaag.toJSON());
+
+     }
+      else
+      {
+        console.log('Zaterdag');
+        vandaag = new Date("May 20 2023 04:00:00 GMT+02:00");
+        vandaag.setHours(nu.getHours());
+        vandaag.setMinutes(nu.getMinutes());
+        vandaag.setSeconds(nu.getSeconds());
+        console.log(vandaag.toJSON());
+        console.log(new Date());
+        
+       }
+    
+    vandaag = vandaag.toISOString();
 
 useHead({
   title: 'BAM! Festival LED Wall Application',
@@ -217,10 +247,11 @@ function timeBedankt() {
 
   
 
- const runtimeConfig = useRuntimeConfig();
 
- const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?sort=field_dag,-field_aanvang,title&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
+
+ //const { data:highlights } = await useFetch('https://cms.bamfestival.nl/jsonapi/node/event?sort=field_dag,-field_aanvang,title&include=field_image_portrait,field_location,field_tags&jsonapi_include=1&filter[field_aanvang][condition][path]=field_aanvang&filter[field_aanvang][condition][operator]=IS NOT NULL');
  const { data:sponsoren } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&sort=-field_weight,title&include=field_image&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NULL&filter[field_sponsorvideo][condition][path]=field_sponsor_slide&filter[field_sponsorvideo][condition][operator]=IS NULL");
+ console.log(sponsoren);
  const { data:banners } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/banner?jsonapi_include=1&field_visibility[value]=LED&include=field_image,field_media");
  
  const { data:sponsorslides } = await useFetch("https://cms.bamfestival.nl/jsonapi/node/sponsor?filter[status][value]=1&sort=-field_weight,title&include=field_sponsor_slide&jsonapi_include=1&filter[field_visibilty][value]=LED&filter[field_sponsor_slide][condition][path]=field_sponsor_slide&filter[field_sponsor_slide][condition][operator]=IS NOT NULL");

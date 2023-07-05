@@ -8,6 +8,7 @@ export default defineNuxtConfig({
      '@nuxt/image-edge',
      'nuxt-swiper',
      '@vite-pwa/nuxt',
+     '@pinia/nuxt',
      
            ],
 
